@@ -45,5 +45,18 @@ public class CompanyController {
         return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping(params = {"page", "pageSize"})
+    public ResponseEntity<Object> getCompaniesPage(@RequestParam(value = "page") int page, @RequestParam(value = "pageSize") int pageSize) {
+        int startingIndex = (page - 1) * pageSize;
+        int endingIndex = page * pageSize;
+        if (this.companies.size() < startingIndex) {
+            return new ResponseEntity<>("This page doesn't exists as companies list size is not big enough, please go back to page 1", HttpStatus.OK);
+        } else if (this.companies.size() > startingIndex && this.companies.size() < endingIndex) {
+            return new ResponseEntity<>(this.companies.subList(startingIndex, companies.size()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(this.companies.subList(startingIndex, endingIndex), HttpStatus.OK);
+    }
+
+
 
 }
