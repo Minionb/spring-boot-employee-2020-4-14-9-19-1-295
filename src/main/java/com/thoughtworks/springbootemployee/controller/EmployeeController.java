@@ -17,24 +17,24 @@ public class EmployeeController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Employee> getAllEmployee(){
-        employees.add(new Employee(1,"Hilary",23,"female"));
-        employees.add(new Employee(2,"Jay",30,"male"));
-        employees.add(new Employee(3,"Candy",23,"female"));
-        employees.add(new Employee(4,"Tommy",26,"male"));
+    public List<Employee> getAllEmployee() {
+        employees.add(new Employee(1, "Hilary", 23, "female"));
+        employees.add(new Employee(2, "Jay", 30, "male"));
+        employees.add(new Employee(3, "Candy", 23, "female"));
+        employees.add(new Employee(4, "Tommy", 26, "male"));
         return employees;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employee createNewEmployee(@RequestBody Employee employee){
+    public Employee createNewEmployee(@RequestBody Employee employee) {
         employees.add(employee);
         return employee;
     }
 
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> deleteEmployee(@PathVariable int employeeId){
+    public ResponseEntity<Object> deleteEmployee(@PathVariable int employeeId) {
         Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
         if (targetEmployee != null) {
             employees.remove(targetEmployee);
@@ -57,19 +57,30 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employeeId}")
-    public ResponseEntity<Object> getEmployeesById(@PathVariable int employeeID) {
-        Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeID).findFirst().orElse(null);
+    public ResponseEntity<Object> getEmployeesById(@PathVariable int employeeId) {
+        Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
         if (targetEmployee != null) {
             return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
         }
         return new ResponseEntity<>("Employee does not exist", HttpStatus.BAD_REQUEST);
     }
 
-    @RequestMapping(method = RequestMethod.GET, params = {"gender"})
+    @GetMapping(params = {"gender"})
     public ResponseEntity<Object> getEmployeesByGender(@RequestParam(value = "gender") String gender) {
         List<Employee> returnEmployees = this.employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
         return new ResponseEntity<>(returnEmployees, HttpStatus.OK);
-}
+    }
 
+    @GetMapping(params = {"page", "pageSize"})
+    public ResponseEntity<Object> getEmployeesPage(@RequestParam(value = "page") int page, @RequestParam(value = "pageSize") int pageSize) {
+        int startingIndex = (page - 1) * pageSize;
+        int endingIndex = page * pageSize;
+        if (this.employees.size() < startingIndex) {
+            return new ResponseEntity<>("This page doesn't exists as employees size is not big enough, please go back to page 1 ", HttpStatus.BAD_REQUEST);
+        } else if (this.employees.size() > startingIndex && this.employees.size() < endingIndex) {
+            return new ResponseEntity<>(this.employees.subList(startingIndex, employees.size()), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(this.employees.subList(startingIndex, endingIndex), HttpStatus.OK);
+    }
 
 }
