@@ -67,13 +67,21 @@ public class CompanyController {
     @PutMapping
     public ResponseEntity<Object> updateCompanies(@RequestBody int companyId, Company newCompany) {
         Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null);
-        if (selectedCompany == null) {
-            return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+        if (selectedCompany != null) {
+            companies.set(companies.indexOf(selectedCompany), newCompany);
+            return new ResponseEntity<>(newCompany, HttpStatus.OK);
         }
-        companies.set(companies.indexOf(selectedCompany), newCompany);
-        return new ResponseEntity<>(newCompany, HttpStatus.OK);
+        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
-
+    @DeleteMapping(path = "/{companyID}")
+    public ResponseEntity<Object> deleteCompaniesEmployees(@PathVariable int companyID) {
+        Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyID).findFirst().orElse(null);
+        if (selectedCompany != null && selectedCompany.getEmployees() != null) {
+            selectedCompany.setEmployees(new ArrayList<>());
+            return new ResponseEntity<>("Remove all the employees for the company with id " + companyID + " successfully", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+    }
 
 }
