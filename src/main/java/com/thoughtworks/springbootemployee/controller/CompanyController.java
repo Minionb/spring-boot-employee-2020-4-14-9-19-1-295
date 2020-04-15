@@ -57,6 +57,12 @@ public class CompanyController {
         return new ResponseEntity<>(this.companies.subList(startingIndex, endingIndex), HttpStatus.OK);
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Company createNewCompany(@RequestBody Company company) {
+        companies.add(company);
+        return company;
+    }
 
 
 }
