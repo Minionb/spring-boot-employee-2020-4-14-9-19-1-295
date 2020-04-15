@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.controller;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,6 +29,17 @@ public class EmployeeController {
     public Employee createNewEmployee(@RequestBody Employee employee){
         employees.add(employee);
         return employee;
+    }
+
+    @DeleteMapping("/{employeeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> deleteEmployee(@PathVariable Integer employeeId){
+        Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
+        if (targetEmployee == null) {
+            return new ResponseEntity<>("Employee does not exist!", HttpStatus.BAD_REQUEST);
+        }
+        employees.remove(targetEmployee);
+        return new ResponseEntity<String>((MultiValueMap<String, String>) targetEmployee, HttpStatus.OK);
     }
 
 
