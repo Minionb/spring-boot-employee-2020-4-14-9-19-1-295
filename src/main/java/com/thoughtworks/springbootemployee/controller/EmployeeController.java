@@ -33,16 +33,27 @@ public class EmployeeController {
 
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> deleteEmployee(@PathVariable Integer employeeId){
+    public ResponseEntity<String> deleteEmployee(@PathVariable int employeeId){
         Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
-        if (targetEmployee == null) {
-            return new ResponseEntity<>("Employee does not exist!", HttpStatus.BAD_REQUEST);
+        if (targetEmployee != null) {
+            employees.remove(targetEmployee);
+            return new ResponseEntity<String>((MultiValueMap<String, String>) targetEmployee, HttpStatus.OK);
+
         }
-        employees.remove(targetEmployee);
-        return new ResponseEntity<String>((MultiValueMap<String, String>) targetEmployee, HttpStatus.OK);
+        return new ResponseEntity<>("Employee doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
+    @PutMapping("/{employeeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Object> updateEmployee(@PathVariable int employeeId, Employee newEmployee) {
+        Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
+        if (targetEmployee != null) {
+            employees.set(employees.indexOf(targetEmployee), newEmployee);
+            return new ResponseEntity<>(newEmployee, HttpStatus.OK);
 
+        }
+        return new ResponseEntity<>("Employee doesn't exist", HttpStatus.BAD_REQUEST);
+    }
 
 
 }
