@@ -27,6 +27,13 @@ public class CompanyController {
         return companies;
     }
 
-
+    @GetMapping(path = "/{companyId}")
+    public ResponseEntity<Object> getCompanyById(@PathVariable int companyId) {
+        Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null);
+        if (selectedCompany != null) {
+            return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+    }
 
 }

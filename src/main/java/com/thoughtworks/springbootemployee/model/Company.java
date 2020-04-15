@@ -9,8 +9,8 @@ public class Company {
     private int employeesNumber;
     private List<Employee> employees;
 
-    public Company(int id, String companyName, int employeesNumber, List<Employee> employees) {
-        this.companyId = id;
+    public Company(int companyId, String companyName, int employeesNumber, List<Employee> employees) {
+        this.companyId = companyId;
         this.companyName = companyName;
         this.employeesNumber = employeesNumber;
         this.employees = employees;
