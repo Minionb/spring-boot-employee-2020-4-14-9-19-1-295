@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/employees")
@@ -17,10 +18,10 @@ public class EmployeeController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllEmployee(){
-        employees.add(new Employee(1,"Hilary",23,"Female"));
-        employees.add(new Employee(2,"Jay",30,"Male"));
-        employees.add(new Employee(3,"Candy",23,"Female"));
-        employees.add(new Employee(4,"Tommy",26,"Male"));
+        employees.add(new Employee(1,"Hilary",23,"female"));
+        employees.add(new Employee(2,"Jay",30,"male"));
+        employees.add(new Employee(3,"Candy",23,"female"));
+        employees.add(new Employee(4,"Tommy",26,"male"));
         return employees;
     }
 
@@ -33,11 +34,11 @@ public class EmployeeController {
 
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> deleteEmployee(@PathVariable int employeeId){
+    public ResponseEntity<Object> deleteEmployee(@PathVariable int employeeId){
         Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
         if (targetEmployee != null) {
             employees.remove(targetEmployee);
-            return new ResponseEntity<String>((MultiValueMap<String, String>) targetEmployee, HttpStatus.OK);
+            return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
 
         }
         return new ResponseEntity<>("Employee doesn't exist", HttpStatus.BAD_REQUEST);
@@ -45,7 +46,7 @@ public class EmployeeController {
 
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updateEmployee(@PathVariable int employeeId, Employee newEmployee) {
+    public ResponseEntity<Object> updateEmployee(@PathVariable int employeeId, @RequestBody Employee newEmployee) {
         Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
         if (targetEmployee != null) {
             employees.set(employees.indexOf(targetEmployee), newEmployee);
@@ -55,12 +56,20 @@ public class EmployeeController {
         return new ResponseEntity<>("Employee doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/{employeeID}")
-    public ResponseEntity<Object> getEmployees(@PathVariable int employeeID) {
+    @GetMapping("/{employeeId}")
+    public ResponseEntity<Object> getEmployeesById(@PathVariable int employeeID) {
         Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeID).findFirst().orElse(null);
         if (targetEmployee != null) {
             return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
         }
         return new ResponseEntity<>("Employee does not exist", HttpStatus.BAD_REQUEST);
     }
+
+    @RequestMapping(method = RequestMethod.GET, params = {"gender"})
+    public ResponseEntity<Object> getEmployeesByGender(@RequestParam(value = "gender") String gender) {
+        List<Employee> returnEmployees = this.employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
+        return new ResponseEntity<>(returnEmployees, HttpStatus.OK);
+}
+
+
 }
