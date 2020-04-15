@@ -18,10 +18,10 @@ public class EmployeeController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllEmployee() {
-        employees.add(new Employee(1, "Hilary", 23, "female"));
-        employees.add(new Employee(2, "Jay", 30, "male"));
-        employees.add(new Employee(3, "Candy", 23, "female"));
-        employees.add(new Employee(4, "Tommy", 26, "male"));
+        employees.add(new Employee(1, "Hilary", 23, "female",10000));
+        employees.add(new Employee(2, "Jay", 30, "male",10000));
+        employees.add(new Employee(3, "Candy", 23, "female",10000));
+        employees.add(new Employee(4, "Tommy", 26, "male",10000));
         return employees;
     }
 
