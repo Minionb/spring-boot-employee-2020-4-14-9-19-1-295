@@ -36,4 +36,14 @@ public class CompanyController {
         return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping(path = "/{companyID}/employees")
+    public ResponseEntity<Object> getEmployeesInCompany(@PathVariable int companyID) {
+        Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyID).findFirst().orElse(null);
+        if (selectedCompany != null) {
+            return new ResponseEntity<>(selectedCompany.getEmployees(), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+    }
+
+
 }
