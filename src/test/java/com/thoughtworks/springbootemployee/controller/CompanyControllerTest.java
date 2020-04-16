@@ -66,4 +66,24 @@ public class CompanyControllerTest {
         Assert.assertEquals("Alibaba", company.getCompanyName());
     }
 
+    @Test
+    public void should_return_employees_of_a_company(){
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .when()
+                .get("/companies/1/employees");
+
+        Assert.assertEquals(200, response.getStatusCode());
+
+        List<Employee> employee = response.getBody().as(new TypeRef<List<Employee>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        });
+
+        Assert.assertEquals(1, employee.get(0).getId());
+        Assert.assertEquals(2, employee.get(1).getId());
+        Assert.assertEquals("Hilary", employee.get(0).getName());
+        Assert.assertEquals("Jay", employee.get(1).getName());
+    }
 }
