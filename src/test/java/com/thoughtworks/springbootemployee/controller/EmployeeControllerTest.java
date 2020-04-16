@@ -88,4 +88,25 @@ public class EmployeeControllerTest {
         Assert.assertEquals("Kathy", employeeResponse.getName());
     }
 
+    @Test
+    public void should_return_all_employees(){
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .when()
+                .get("/employees");
+
+        Assert.assertEquals(200, response.getStatusCode());
+
+        List<Employee> employees = response.getBody().as(new TypeRef<List<Employee>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        });
+
+        Assert.assertEquals(4, employees.size());
+        Assert.assertEquals("Hilary", employees.get(0).getName());
+        Assert.assertEquals("Jay", employees.get(1).getName());
+        Assert.assertEquals("Candy", employees.get(2).getName());
+        Assert.assertEquals("Tommy", employees.get(3).getName());
+    }
 }
