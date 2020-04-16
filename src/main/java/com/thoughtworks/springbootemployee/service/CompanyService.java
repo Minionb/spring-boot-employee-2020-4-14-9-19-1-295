@@ -20,4 +20,25 @@ public class CompanyService {
     public ResponseEntity<Object> getById(int companyId) {
         return companyRepository.findById(companyId);
     }
+
+    public ResponseEntity<Object> getEmployeesByCompanyId(int companyId) {
+        return companyRepository.findEmployeesById(companyId);
+    }
+
+    public ResponseEntity<Object> getCompaniesInPage(int page, int pageSize) {
+        return companyRepository.findCompaniesInPage(page,pageSize);
+    }
+
+    public Company createCompany(Company company) {
+        return companyRepository.create(company);
+    }
+
+    public ResponseEntity<Object> updateByCompanyId(int companyId, Company newCompany) {
+        return companyRepository.update(companyId,newCompany);
+    }
+
+
+    public ResponseEntity<Object> deleteEmployeesByCompanyId(int companyID) {
+        return companyRepository.delete(companyID);
+    }
 }

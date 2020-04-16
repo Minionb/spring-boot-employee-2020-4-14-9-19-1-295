@@ -17,7 +17,7 @@ public class CompanyController {
     private List<Company> companies = new ArrayList<>();
     private List<Employee> employees = new ArrayList<>();
     @Autowired
-    private CompanyService service;
+    private CompanyService companyService;
 
     public CompanyController(){
         this.employees.add(new Employee(1, "Hilary", 23, "female", 10000));
@@ -31,60 +31,39 @@ public class CompanyController {
     }
     @GetMapping
     public List<Company> getAllCompanies() {
-        return service.getAll();
+        return companyService.getAll();
     }
 
     @GetMapping(path = "/{companyId}")
     public ResponseEntity<Object> getCompanyById(@PathVariable int companyId) {
-        return service.getById(companyId);
+        return companyService.getById(companyId);
     }
 
-    @GetMapping(path = "/{companyID}/employees")
-    public ResponseEntity<Object> getEmployeesInCompany(@PathVariable int companyID) {
-        Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyID).findFirst().orElse(null);
-        if (selectedCompany != null) {
-            return new ResponseEntity<>(selectedCompany.getEmployees(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+    @GetMapping(path = "/{companyId}/employees")
+    public ResponseEntity<Object> getEmployeesInCompany(@PathVariable int companyId) {
+        return companyService.getEmployeesByCompanyId(companyId);
     }
 
     @GetMapping(params = {"page", "pageSize"})
     public ResponseEntity<Object> getCompaniesPage(@RequestParam(value = "page") int page, @RequestParam(value = "pageSize") int pageSize) {
-        int startingIndex = (page - 1) * pageSize;
-        int endingIndex = page * pageSize;
-        if (this.companies.size() < startingIndex) {
-            return new ResponseEntity<>("This page doesn't exists as companies list size is not big enough, please go back to page 1", HttpStatus.OK);
-        } else if (this.companies.size() > startingIndex && this.companies.size() < endingIndex) {
-            return new ResponseEntity<>(this.companies.subList(startingIndex, companies.size()), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(this.companies.subList(startingIndex, endingIndex), HttpStatus.OK);
+        return companyService.getCompaniesInPage(page,pageSize);
+
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Company createNewCompany(@RequestBody Company company) {
-        companies.add(company);
-        return company;
+        return companyService.createCompany(company);
     }
 
     @PutMapping("/{companyId}")
     public ResponseEntity<Object> updateCompanies(@PathVariable int companyId, @RequestBody Company newCompany) {
-        Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null);
-        if (selectedCompany != null) {
-            companies.set(companies.indexOf(selectedCompany), newCompany);
-            return new ResponseEntity<>(newCompany, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+        return companyService.updateByCompanyId(companyId,newCompany);
     }
 
     @DeleteMapping("/{companyID}")
     public ResponseEntity<Object> deleteCompaniesEmployees(@PathVariable int companyID) {
-        Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyID).findFirst().orElse(null);
-        if (selectedCompany != null && selectedCompany.getEmployees() != null) {
-            selectedCompany.setEmployees(new ArrayList<>());
-            return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+        return companyService.deleteEmployeesByCompanyId(companyID);
     }
 
 }
