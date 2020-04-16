@@ -24,8 +24,6 @@ import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 public class CompanyControllerTest {
     @Autowired
     private CompanyController companyController;
-    private List<Company> companies = new ArrayList<>();
-    private List<Employee> employees = new ArrayList<>();
 
     @Before
     public void setUp() throws Exception{

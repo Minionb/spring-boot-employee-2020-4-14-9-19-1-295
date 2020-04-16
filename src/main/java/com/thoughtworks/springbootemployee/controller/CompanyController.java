@@ -14,21 +14,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-    private List<Company> companies = new ArrayList<>();
-    private List<Employee> employees = new ArrayList<>();
     @Autowired
     private CompanyService companyService;
-
-    public CompanyController() {
-        this.employees.add(new Employee(1, "Hilary", 23, "female", 10000));
-        this.employees.add(new Employee(2, "Jay", 30, "male", 10000));
-        this.employees.add(new Employee(3, "Candy", 23, "female", 10000));
-        this.employees.add(new Employee(4, "Tommy", 26, "male", 10000));
-
-        this.companies.add(new Company(1, "Alibaba", 200, this.employees.subList(0, 2)));
-        this.companies.add(new Company(2, "Chocolate Factory", 50, this.employees.subList(2, 4)));
-
-    }
 
     @GetMapping
     public List<Company> getAllCompanies() {
