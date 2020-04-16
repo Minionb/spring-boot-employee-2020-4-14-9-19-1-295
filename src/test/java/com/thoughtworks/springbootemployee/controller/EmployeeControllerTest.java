@@ -33,25 +33,20 @@ public class EmployeeControllerTest {
     @Before
     public void setUp() throws Exception{
         RestAssuredMockMvc.standaloneSetup(employeeController);
-        employees.add(new Employee(1, "Hilary", 23, "female", 10000));
-        employees.add(new Employee(2, "Jay", 30, "male", 10000));
-        employees.add(new Employee(3, "Candy", 23, "female", 10000));
-        employees.add(new Employee(4, "Tommy", 26, "male", 10000));
-        employeeController.setEmployees(employees);
     }
 
 
     @Test
-    public void should_find_employ_by_id(){
+    public void should_find_employee_by_id(){
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
-                .get("/employees/1");
+                .get("/employees/2");
 
         Assert.assertEquals(200, response.getStatusCode());
 
         Employee employee = response.getBody().as(Employee.class);
-        Assert.assertEquals(1, employee.getId());
-        Assert.assertEquals("Hilary", employee.getName());
+        Assert.assertEquals(2, employee.getId());
+        Assert.assertEquals("Jay", employee.getName());
     }
 
     @Test
