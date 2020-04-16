@@ -19,7 +19,7 @@ public class CompanyController {
     @Autowired
     private CompanyService companyService;
 
-    public CompanyController(){
+    public CompanyController() {
         this.employees.add(new Employee(1, "Hilary", 23, "female", 10000));
         this.employees.add(new Employee(2, "Jay", 30, "male", 10000));
         this.employees.add(new Employee(3, "Candy", 23, "female", 10000));
@@ -29,6 +29,7 @@ public class CompanyController {
         this.companies.add(new Company(2, "Chocolate Factory", 50, this.employees.subList(2, 4)));
 
     }
+
     @GetMapping
     public List<Company> getAllCompanies() {
         return companyService.getAll();
@@ -46,7 +47,7 @@ public class CompanyController {
 
     @GetMapping(params = {"page", "pageSize"})
     public ResponseEntity<Object> getCompaniesPage(@RequestParam(value = "page") int page, @RequestParam(value = "pageSize") int pageSize) {
-        return companyService.getCompaniesInPage(page,pageSize);
+        return companyService.getCompaniesInPage(page, pageSize);
 
     }
 
@@ -58,7 +59,7 @@ public class CompanyController {
 
     @PutMapping("/{companyId}")
     public ResponseEntity<Object> updateCompanies(@PathVariable int companyId, @RequestBody Company newCompany) {
-        return companyService.updateByCompanyId(companyId,newCompany);
+        return companyService.updateByCompanyId(companyId, newCompany);
     }
 
     @DeleteMapping("/{companyID}")

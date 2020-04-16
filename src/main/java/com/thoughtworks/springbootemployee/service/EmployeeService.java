@@ -19,7 +19,6 @@ public class EmployeeService {
 
     public ResponseEntity<Object> getById(int employeeId) {
         return repository.findById(employeeId);
-
     }
 
     public Employee create(Employee employee) {
@@ -31,7 +30,7 @@ public class EmployeeService {
     }
 
     public ResponseEntity<Object> update(int employeeId, Employee newEmployee) {
-        return repository.updateById(employeeId,newEmployee);
+        return repository.updateById(employeeId, newEmployee);
     }
 
     public ResponseEntity<Object> getByGender(String gender) {
@@ -39,6 +38,6 @@ public class EmployeeService {
     }
 
     public ResponseEntity<Object> getPage(int page, int pageSize) {
-        return repository.findPage(page,pageSize);
+        return repository.findPage(page, pageSize);
     }
 }

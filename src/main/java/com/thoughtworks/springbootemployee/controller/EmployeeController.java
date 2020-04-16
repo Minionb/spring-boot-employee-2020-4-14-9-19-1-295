@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -38,7 +37,7 @@ public class EmployeeController {
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> updateEmployee(@PathVariable int employeeId, @RequestBody Employee newEmployee) {
-        return service.update(employeeId,newEmployee);
+        return service.update(employeeId, newEmployee);
 
     }
 
@@ -54,7 +53,7 @@ public class EmployeeController {
 
     @GetMapping(params = {"page", "pageSize"})
     public ResponseEntity<Object> getEmployeesPage(@RequestParam(value = "page") int page, @RequestParam(value = "pageSize") int pageSize) {
-        return service.getPage(page,pageSize);
+        return service.getPage(page, pageSize);
     }
 
 }

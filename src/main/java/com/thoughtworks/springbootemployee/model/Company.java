@@ -15,7 +15,7 @@ public class Company {
         this.employees = employees;
     }
 
-    public Company(){
+    public Company() {
 
     }
 
