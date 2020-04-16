@@ -142,7 +142,7 @@ public class CompanyControllerTest {
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(selectedCompany)
                 .when()
-                .put("/companies/1");
+                .put("/companies/2");
 
         Assert.assertEquals(200, response.getStatusCode());
 
@@ -153,4 +153,20 @@ public class CompanyControllerTest {
         Assert.assertEquals(300, company.getEmployeesNumber());
         Assert.assertEquals(3, company.getEmployees().size());
     }
+
+    @Test
+    public void should_delete_company_by_id(){
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .when()
+                .delete("/companies/1");
+
+        Assert.assertEquals(200, response.getStatusCode());
+
+        Company company = response.getBody().as(Company.class);
+
+        Assert.assertEquals(1, company.getId());
+        Assert.assertEquals("Alibaba", company.getCompanyName());
+        Assert.assertEquals(0, company.getEmployees().size());
+    }
+
 }

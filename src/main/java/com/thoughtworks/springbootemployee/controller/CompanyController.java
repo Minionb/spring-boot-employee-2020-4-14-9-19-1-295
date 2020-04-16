@@ -82,7 +82,7 @@ public class CompanyController {
         Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyID).findFirst().orElse(null);
         if (selectedCompany != null && selectedCompany.getEmployees() != null) {
             selectedCompany.setEmployees(new ArrayList<>());
-            return new ResponseEntity<>("Remove all the employees for the company with id " + companyID + " successfully", HttpStatus.OK);
+            return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
         }
         return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
     }
