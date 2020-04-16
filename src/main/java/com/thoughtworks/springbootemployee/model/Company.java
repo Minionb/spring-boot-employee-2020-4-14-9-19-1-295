@@ -1,6 +1,5 @@
 package com.thoughtworks.springbootemployee.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Company {

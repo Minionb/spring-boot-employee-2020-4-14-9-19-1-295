@@ -64,7 +64,7 @@ public class CompanyController {
         return company;
     }
 
-    @PutMapping("/{companyID}")
+    @PutMapping("/{companyId}")
     public ResponseEntity<Object> updateCompanies(@PathVariable int companyId, @RequestBody Company newCompany) {
         Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null);
         if (selectedCompany != null) {

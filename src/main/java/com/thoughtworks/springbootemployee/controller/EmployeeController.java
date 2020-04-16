@@ -3,7 +3,6 @@ package com.thoughtworks.springbootemployee.controller;
 import com.thoughtworks.springbootemployee.model.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -35,7 +34,11 @@ public class EmployeeController {
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteEmployee(@PathVariable int employeeId) {
-        Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
+        Employee targetEmployee = this.employees.stream()
+                .filter(employee -> employee.getId() == employeeId)
+                .findFirst()
+                .orElse(null);
+
         if (targetEmployee != null) {
             employees.remove(targetEmployee);
             return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
