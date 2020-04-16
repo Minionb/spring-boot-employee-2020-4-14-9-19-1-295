@@ -1,6 +1,8 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.service.EmployeeService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,9 @@ import java.util.stream.Collectors;
 public class EmployeeController {
     private List<Employee> employees = new ArrayList<>();
 
+    @Autowired
+    private EmployeeService service = new EmployeeService();
+
     public EmployeeController(){
         employees.add(new Employee(1, "Hilary", 23, "female", 10000));
         employees.add(new Employee(2, "Jay", 30, "male", 10000));
@@ -24,30 +29,19 @@ public class EmployeeController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllEmployee() {
-        return this.employees;
+        return service.getAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Employee createNewEmployee(@RequestBody Employee employee) {
-        employees.add(employee);
-        return employee;
+        return service.create(employee);
     }
 
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteEmployee(@PathVariable int employeeId) {
-        Employee targetEmployee = this.employees.stream()
-                .filter(employee -> employee.getId() == employeeId)
-                .findFirst()
-                .orElse(null);
-
-        if (targetEmployee != null) {
-            employees.remove(targetEmployee);
-            return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
-
-        }
-        return new ResponseEntity<>("Employee doesn't exist", HttpStatus.BAD_REQUEST);
+        return service.delete(employeeId);
     }
 
     @PutMapping("/{employeeId}")
@@ -64,11 +58,7 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}")
     public ResponseEntity<Object> getEmployeesById(@PathVariable int employeeId) {
-        Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
-        if (targetEmployee != null) {
-            return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Employee does not exist", HttpStatus.BAD_REQUEST);
+        return service.getEmployeeById(employeeId);
     }
 
     @GetMapping(params = {"gender"})

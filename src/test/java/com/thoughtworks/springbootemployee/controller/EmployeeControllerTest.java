@@ -121,15 +121,15 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_update_employee_information_by_id(){
-        Employee newEmployee = new Employee(1,"Kathy",26,"female",10000);
+        Employee newEmployee = new Employee(3,"Kathy",26,"female",10000);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(newEmployee)
                 .when()
-                .put("/employees/1");
+                .put("/employees/3");
 
         Assert.assertEquals(200, response.getStatusCode());
         Employee employee = response.getBody().as(Employee.class);
-        Assert.assertEquals(1, employee.getId());
+        Assert.assertEquals(3, employee.getId());
         Assert.assertEquals("Kathy", employee.getName());
     }
 
