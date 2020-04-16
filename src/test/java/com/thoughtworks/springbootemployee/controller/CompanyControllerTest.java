@@ -107,4 +107,29 @@ public class CompanyControllerTest {
 
     }
 
+    @Test
+    public void should_add_company(){
+        List<Employee> employees = new ArrayList<>();
+        employees.add(new Employee(5,"Leo",22,"male",10000));
+        employees.add(new Employee(6,"Wesley",20,"male",10000));
+        employees.add(new Employee(7,"Andy",20,"male",10000));
+        Company newCompany = new Company(3, "OOCL", 400, employees);
+
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .body(newCompany)
+                .when()
+                .post("/companies");
+
+        Assert.assertEquals(201, response.getStatusCode());
+
+        Company company = response.getBody().as(Company.class);
+
+        Assert.assertEquals(3, company.getId());
+        Assert.assertEquals("OOCL", company.getCompanyName());
+        Assert.assertEquals(3, company.getEmployees().size());
+
+    }
+
+
+
 }

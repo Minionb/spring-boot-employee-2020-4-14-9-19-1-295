@@ -15,6 +15,10 @@ public class Company {
         this.employees = employees;
     }
 
+    public Company(){
+
+    }
+
     public int getId() {
         return companyId;
     }
