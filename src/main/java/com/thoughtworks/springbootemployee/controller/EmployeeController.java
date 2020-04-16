@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/employees")
 public class EmployeeController {
     private List<Employee> employees = new ArrayList<>();
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
