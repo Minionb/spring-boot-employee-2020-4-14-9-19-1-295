@@ -13,17 +13,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-    private List<Employee> employees = new ArrayList<>();
 
     @Autowired
     private EmployeeService service = new EmployeeService();
-
-    public EmployeeController(){
-        this.employees.add(new Employee(1, "Hilary", 23, "female", 10000));
-        this.employees.add(new Employee(2, "Jay", 30, "male", 10000));
-        this.employees.add(new Employee(3, "Candy", 23, "female", 10000));
-        this.employees.add(new Employee(4, "Tommy", 26, "male", 10000));
-    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)

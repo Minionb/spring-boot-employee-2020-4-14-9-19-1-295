@@ -2,6 +2,8 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.service.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,8 @@ import java.util.List;
 public class CompanyController {
     private List<Company> companies = new ArrayList<>();
     private List<Employee> employees = new ArrayList<>();
+    @Autowired
+    private CompanyService service;
 
     public CompanyController(){
         this.employees.add(new Employee(1, "Hilary", 23, "female", 10000));
@@ -27,16 +31,12 @@ public class CompanyController {
     }
     @GetMapping
     public List<Company> getAllCompanies() {
-        return this.companies;
+        return service.getAll();
     }
 
     @GetMapping(path = "/{companyId}")
     public ResponseEntity<Object> getCompanyById(@PathVariable int companyId) {
-        Company selectedCompany = this.companies.stream().filter(company -> company.getId() == companyId).findFirst().orElse(null);
-        if (selectedCompany != null) {
-            return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+        return service.getById(companyId);
     }
 
     @GetMapping(path = "/{companyID}/employees")
