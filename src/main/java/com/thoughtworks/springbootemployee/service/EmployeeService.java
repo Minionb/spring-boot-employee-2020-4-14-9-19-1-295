@@ -3,12 +3,10 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.respository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Scanner;
 
 @Service
 public class EmployeeService {
@@ -19,7 +17,7 @@ public class EmployeeService {
         return repository.findAll();
     }
 
-    public ResponseEntity<Object> getEmployeeById(int employeeId) {
+    public ResponseEntity<Object> getById(int employeeId) {
         return repository.findById(employeeId);
 
     }
@@ -29,6 +27,18 @@ public class EmployeeService {
     }
 
     public ResponseEntity<Object> delete(int employeeId) {
-        return repository.delete(employeeId);
+        return repository.deleteById(employeeId);
+    }
+
+    public ResponseEntity<Object> update(int employeeId, Employee newEmployee) {
+        return repository.updateById(employeeId,newEmployee);
+    }
+
+    public ResponseEntity<Object> getByGender(String gender) {
+        return repository.findByGender(gender);
+    }
+
+    public ResponseEntity<Object> getPage(int page, int pageSize) {
+        return repository.findPage(page,pageSize);
     }
 }
