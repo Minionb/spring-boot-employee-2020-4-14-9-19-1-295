@@ -72,4 +72,20 @@ public class EmployeeControllerTest {
         Assert.assertEquals(2, employees.size());
         Assert.assertEquals("Jay", employees.get(0).getName());
     }
+
+    @Test
+    public void should_add_employee() {
+        Employee employee = new Employee(5,"Kathy",26,"female",10000);
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .body(employee)
+                .when()
+                .post("/employees");
+
+        Assert.assertEquals(201, response.getStatusCode());
+
+        Employee employeeResponse = response.getBody().as(Employee.class);
+
+        Assert.assertEquals("Kathy", employeeResponse.getName());
+    }
+
 }
