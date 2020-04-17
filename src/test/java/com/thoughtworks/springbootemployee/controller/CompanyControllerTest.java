@@ -95,8 +95,9 @@ public class CompanyControllerTest {
             }
         });
 
-        Assert.assertEquals(1, employee.get(0).getId());
-        Assert.assertEquals(2, employee.get(1).getId());
+
+        Assert.assertEquals(1, employee.get(0).getId().intValue());
+        Assert.assertEquals(2, employee.get(1).getId().intValue());
         Assert.assertEquals("Hilary", employee.get(0).getName());
         Assert.assertEquals("Jay", employee.get(1).getName());
     }
