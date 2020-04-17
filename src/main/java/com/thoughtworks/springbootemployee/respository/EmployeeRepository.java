@@ -26,7 +26,10 @@ public class EmployeeRepository {
     }
 
     public ResponseEntity<Object> findById(int employeeId) {
-        Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
+        Employee targetEmployee = this.employees.stream().
+                filter(employee -> employee.getId() == employeeId).findFirst().
+                orElse(null);
+
         if (targetEmployee != null) {
             return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
         }
@@ -53,7 +56,11 @@ public class EmployeeRepository {
     }
 
     public ResponseEntity<Object> updateById(int employeeId, Employee newEmployee) {
-        Employee targetEmployee = this.employees.stream().filter(employee -> employee.getId() == employeeId).findFirst().orElse(null);
+        Employee targetEmployee = this.employees.stream().
+                filter(employee -> employee.getId() == employeeId).
+                findFirst().
+                orElse(null);
+
         if (targetEmployee != null) {
             employees.set(employees.indexOf(targetEmployee), newEmployee);
             return new ResponseEntity<>(newEmployee, HttpStatus.OK);
@@ -63,13 +70,18 @@ public class EmployeeRepository {
     }
 
     public ResponseEntity<Object> findByGender(String gender) {
-        List<Employee> returnEmployees = this.employees.stream().filter(employee -> employee.getGender().equals(gender)).collect(Collectors.toList());
+        List<Employee> returnEmployees = this.employees.stream().
+                filter(employee -> employee.getGender().
+                        equals(gender)).
+                collect(Collectors.toList());
+
         return new ResponseEntity<>(returnEmployees, HttpStatus.OK);
     }
 
     public ResponseEntity<Object> findPage(int page, int pageSize) {
         int startingIndex = (page - 1) * pageSize;
         int endingIndex = page * pageSize;
+
         if (this.employees.size() < startingIndex) {
             return new ResponseEntity<>("This page doesn't exists as employees size is not big enough, please go back to page 1 ", HttpStatus.BAD_REQUEST);
         } else if (this.employees.size() > startingIndex && this.employees.size() < endingIndex) {
