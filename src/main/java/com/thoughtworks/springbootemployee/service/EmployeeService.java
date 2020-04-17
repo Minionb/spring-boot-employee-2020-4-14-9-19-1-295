@@ -3,8 +3,7 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.respository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -14,50 +13,67 @@ import java.util.stream.Collectors;
 @Service
 public class EmployeeService {
     @Autowired
-    private EmployeeRepository repository;
+    private EmployeeRepository employeeRepository;
 
     public List<Employee> getAll() {
-        return repository.findAll();
+        return employeeRepository.findAll();
     }
 
-    public Employee getById(int employeeId) {
-        return repository.findEmployeeById(employeeId);
+    public Employee get(Integer employeeId) {
+        return employeeRepository.findById(employeeId).orElse(null);
     }
 
     public Employee create(Employee employee) {
-        return repository.save(employee);
+        return employeeRepository.save(employee);
     }
 
     public boolean delete(int employeeId) {
-        Employee targetEmployee = repository.findEmployeeById((employeeId));
+        Employee targetEmployee = employeeRepository.findById((employeeId)).orElse(null);
         if (targetEmployee == null){
             return false;
         }
-        repository.deleteEmployeeById(targetEmployee);
+        employeeRepository.delete(targetEmployee);
         return true;
     }
 
     public boolean updateEmployees(int employeeId, Employee newEmployee) {
-        Employee targetEmployee = repository.findEmployeeById(employeeId);
+        Employee targetEmployee = employeeRepository.findById(employeeId).orElse(null);
+
         if (targetEmployee == null) {
             return false;
         }
-        repository.updateById(employeeId, newEmployee);
+
+        if (newEmployee.getName() != null){
+            targetEmployee.setName(newEmployee.getName());
+        }
+
+        if(newEmployee.getAge() != null){
+            targetEmployee.setAge(newEmployee.getAge());
+        }
+
+        if(newEmployee.getGender() != null){
+            targetEmployee.setGender(newEmployee.getGender());
+        }
+
+        if(newEmployee.getSalary() != null){
+            targetEmployee.setSalary(newEmployee.getSalary());
+        }
         return true;
     }
 
     public List<Employee> getEmployeeByGender(String gender) {
-        return repository.findByGender(gender);
+        return employeeRepository.findAllByGender(gender);
     }
 
-    public List<Employee> getEmployeesWithPagination(int page, int pageSize) {
-        int startingIndex = (page - 1) * pageSize;
-        int endingIndex = page * pageSize;
-        List<Employee> employees = this.repository.findAll();
-        return employees.stream()
-                .sorted(Comparator.comparing(Employee::getId))
-                .skip(startingIndex)
-                .limit(endingIndex)
-                .collect(Collectors.toList());
+    public List<Employee> getEmployeesWithPagination(Integer page, Integer pageSize) {
+        return employeeRepository.findAll(PageRequest.of(page,pageSize)).getContent();
+//        int startingIndex = (page - 1) * pageSize;
+//        int endingIndex = page * pageSize;
+//        List<Employee> employees = this.employeeRepository.findAll();
+//        return employees.stream()
+//                .sorted(Comparator.comparing(Employee::getId))
+//                .skip(startingIndex)
+//                .limit(endingIndex)
+//                .collect(Collectors.toList());
     }
 }

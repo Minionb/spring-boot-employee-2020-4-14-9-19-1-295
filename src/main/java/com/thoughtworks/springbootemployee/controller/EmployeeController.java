@@ -50,7 +50,7 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}")
     public ResponseEntity<Object> getEmployeesById(@PathVariable int employeeId) {
-        Employee targetEmployee = service.getById(employeeId);
+        Employee targetEmployee = service.get(employeeId);
         if (targetEmployee != null) {
             return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
         }
