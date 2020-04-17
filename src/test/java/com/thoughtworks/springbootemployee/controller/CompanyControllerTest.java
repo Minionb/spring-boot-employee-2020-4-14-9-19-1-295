@@ -151,36 +151,30 @@ public class CompanyControllerTest {
         employees.add(new Employee(5,"Leo",22,"male",10000));
         employees.add(new Employee(6,"Wesley",20,"male",10000));
         employees.add(new Employee(7,"Andy",20,"male",10000));
-        Company selectedCompany = new Company(2,"Minion Factory",300,employees);
+        Company selectedCompany = new Company(1,"Minion Factory",300,employees);
 
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(selectedCompany)
                 .when()
-                .put("/companies/2");
-
-        Assert.assertEquals(200, response.getStatusCode());
-
-        Company company = response.getBody().as(Company.class);
-
-        Assert.assertEquals(2, company.getId());
-        Assert.assertEquals("Minion Factory", company.getCompanyName());
-        Assert.assertEquals(300, company.getEmployeesNumber());
-        Assert.assertEquals(3, company.getEmployees().size());
-    }
-
-    @Test
-    public void should_delete_company_by_id(){
-        MockMvcResponse response = given().contentType(ContentType.JSON)
-                .when()
-                .delete("/companies/1");
+                .put("/companies/1");
 
         Assert.assertEquals(200, response.getStatusCode());
 
         Company company = response.getBody().as(Company.class);
 
         Assert.assertEquals(1, company.getId());
-        Assert.assertEquals("Alibaba", company.getCompanyName());
-        Assert.assertEquals(0, company.getEmployees().size());
+        Assert.assertEquals("Minion Factory", company.getCompanyName());
+        Assert.assertEquals(300, company.getEmployeesNumber());
+        Assert.assertEquals(3, company.getEmployees().size());
+    }
+
+    @Test
+    public void should_delete_employees_of_the_company_by_id(){
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .when()
+                .delete("/companies/1");
+
+        Assert.assertEquals(200, response.getStatusCode());
     }
 
 }

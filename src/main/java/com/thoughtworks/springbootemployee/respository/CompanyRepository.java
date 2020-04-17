@@ -33,67 +33,18 @@ public class CompanyRepository {
         return this.companies;
     }
 
-    public ResponseEntity<Object> findCompanyById(int companyId) {
-        Company selectedCompany = this.companies.stream().
+    public Company findCompanyById(int companyId) {
+        return this.companies.stream().
                 filter(company -> company.getId() == companyId).
                 findFirst().orElse(null);
-
-        if (selectedCompany != null) {
-            return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<Object> findEmployeesById(int companyId) {
-        Company selectedCompany = this.companies.stream().
-                filter(company -> company.getId() == companyId).
-                findFirst().orElse(null);
-
-        if (selectedCompany != null) {
-            return new ResponseEntity<>(selectedCompany.getEmployees(), HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
+    public void save(Company company) {
+        this.companies.add(company);
     }
 
-    public ResponseEntity<Object> findCompaniesInPage(int page, int pageSize) {
-        int startingIndex = (page - 1) * pageSize;
-        int endingIndex = page * pageSize;
-
-        if (this.companies.size() < startingIndex) {
-            return new ResponseEntity<>("This page doesn't exists as companies list size is not big enough, please go back to page 1", HttpStatus.OK);
-        } else if (this.companies.size() > startingIndex && this.companies.size() < endingIndex) {
-            return new ResponseEntity<>(this.companies.subList(startingIndex, companies.size()), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(this.companies.subList(startingIndex, endingIndex), HttpStatus.OK);
+    public void update(int companyId, Company newCompany) {
+        this.companies.set(companyId,newCompany);
     }
 
-    public Company create(Company company) {
-        companies.add(company);
-        return company;
-    }
-
-    public ResponseEntity<Object> update(int companyId, Company newCompany) {
-        Company selectedCompany = this.companies.stream().
-                filter(company -> company.getId() == companyId).findFirst().
-                orElse(null);
-
-        if (selectedCompany != null) {
-            companies.set(companies.indexOf(selectedCompany), newCompany);
-            return new ResponseEntity<>(newCompany, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
-    }
-
-
-    public ResponseEntity<Object> delete(int companyID) {
-        Company selectedCompany = this.companies.stream().
-                filter(company -> company.getId() == companyID).findFirst().
-                orElse(null);
-
-        if (selectedCompany != null && selectedCompany.getEmployees() != null) {
-            selectedCompany.setEmployees(new ArrayList<>());
-            return new ResponseEntity<>(selectedCompany, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Company doesn't exist", HttpStatus.BAD_REQUEST);
-    }
 }
