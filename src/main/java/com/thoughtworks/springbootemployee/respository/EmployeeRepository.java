@@ -13,6 +13,14 @@ import java.util.stream.Collectors;
 public class EmployeeRepository {
     private List<Employee> employees = new ArrayList<>();
 
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
     public EmployeeRepository(List<Employee> employees) {
         employees.add(new Employee(1, "Hilary", 23, "female", 10000));
         employees.add(new Employee(2, "Jay", 30, "male", 10000));
@@ -25,15 +33,11 @@ public class EmployeeRepository {
         return employees;
     }
 
-    public ResponseEntity<Object> findById(int employeeId) {
+    public Employee findEmployeeById(int employeeId) {
         Employee targetEmployee = this.employees.stream().
                 filter(employee -> employee.getId() == employeeId).findFirst().
                 orElse(null);
-
-        if (targetEmployee != null) {
-            return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Employee does not exist", HttpStatus.BAD_REQUEST);
+        return targetEmployee;
     }
 
     public Employee save(Employee employee) {
@@ -41,52 +45,18 @@ public class EmployeeRepository {
         return employee;
     }
 
-    public ResponseEntity<Object> deleteById(int employeeId) {
-        Employee targetEmployee = this.employees.stream()
-                .filter(employee -> employee.getId() == employeeId)
-                .findFirst()
-                .orElse(null);
-
-        if (targetEmployee != null) {
-            employees.remove(targetEmployee);
-            return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
-
-        }
-        return new ResponseEntity<>("Employee doesn't exist", HttpStatus.BAD_REQUEST);
+    public void deleteEmployeeById(Employee targetEmployee) {
+        this.employees.remove(targetEmployee);
     }
 
-    public ResponseEntity<Object> updateById(int employeeId, Employee newEmployee) {
-        Employee targetEmployee = this.employees.stream().
-                filter(employee -> employee.getId() == employeeId).
-                findFirst().
-                orElse(null);
-
-        if (targetEmployee != null) {
-            employees.set(employees.indexOf(targetEmployee), newEmployee);
-            return new ResponseEntity<>(newEmployee, HttpStatus.OK);
-
-        }
-        return new ResponseEntity<>("Employee doesn't exist", HttpStatus.BAD_REQUEST);
+    public void updateById(int employeeId, Employee newEmployee) {
+        this.employees.set(employeeId,newEmployee);
     }
 
-    public ResponseEntity<Object> findByGender(String gender) {
-        List<Employee> returnEmployees = this.employees.stream().
-                filter(employee -> employee.getGender().
-                        equals(gender)).
+    public List<Employee> findByGender(String gender) {
+        return this.employees.stream().
+                filter(employee -> employee.getGender().equals(gender)).
                 collect(Collectors.toList());
-
-        return new ResponseEntity<>(returnEmployees, HttpStatus.OK);
     }
 
-    public ResponseEntity<Object> findPage(int page, int pageSize) {
-        int startingIndex = (page - 1) * pageSize;
-        int endingIndex = page * pageSize;
-
-        if (this.employees.size() < startingIndex) {
-            return new ResponseEntity<>("This page doesn't exists as employees size is not big enough, please go back to page 1 ", HttpStatus.BAD_REQUEST);
-        } else if (this.employees.size() > startingIndex && this.employees.size() < endingIndex) {
-            return new ResponseEntity<>(this.employees.subList(startingIndex, employees.size()), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(this.employees.subList(startingIndex, endingIndex), HttpStatus.OK);
-    }
 }

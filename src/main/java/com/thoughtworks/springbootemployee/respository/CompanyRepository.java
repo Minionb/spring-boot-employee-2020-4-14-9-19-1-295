@@ -13,6 +13,10 @@ import java.util.List;
 public class CompanyRepository {
     private List<Company> companies = new ArrayList<>();
 
+    public void setCompanies(List<Company> companies) {
+        this.companies = companies;
+    }
+
     public CompanyRepository(List<Company> companies) {
         List<Employee> employees = new ArrayList<>();
         employees.add(new Employee(1, "Hilary", 23, "female", 10000));
@@ -29,7 +33,7 @@ public class CompanyRepository {
         return this.companies;
     }
 
-    public ResponseEntity<Object> findById(int companyId) {
+    public ResponseEntity<Object> findCompanyById(int companyId) {
         Company selectedCompany = this.companies.stream().
                 filter(company -> company.getId() == companyId).
                 findFirst().orElse(null);

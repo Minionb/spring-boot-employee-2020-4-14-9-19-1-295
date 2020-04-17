@@ -1,6 +1,7 @@
 package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.respository.EmployeeRepository;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
@@ -14,6 +15,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import io.restassured.mapper.TypeRef;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
@@ -25,9 +28,19 @@ public class EmployeeControllerTest {
     @Autowired
     private EmployeeController employeeController;
 
+    @Autowired
+    EmployeeRepository employeeRepository;
+
     @Before
     public void setUp() throws Exception{
         RestAssuredMockMvc.standaloneSetup(employeeController);
+        employeeRepository.setEmployees(new ArrayList<>(Arrays.asList(
+                new Employee(1, "Hilary", 23, "female", 10000),
+                new Employee(2, "Jay", 30, "male", 10000),
+                new Employee(3, "Candy", 23, "female", 10000),
+                new Employee(4, "Tommy", 26, "male", 10000)
+        )));
+
     }
 
 
@@ -64,7 +77,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_add_employee() {
+    public void should_add_employee_successful_when_create_new_employee() {
         Employee employee = new Employee(5,"Kathy",26,"female",10000);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(employee)
@@ -101,16 +114,13 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_delete_employees_by_id(){
+    public void should_delete_employees_successful_when_import_employee_id(){
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .delete("/employees/1");
 
         Assert.assertEquals(200, response.getStatusCode());
-
-        Employee employee = response.getBody().as(Employee.class);
-        Assert.assertEquals(1, employee.getId());
-        Assert.assertEquals("Hilary", employee.getName());
+        Assert.assertEquals(3, this.employeeRepository.getEmployees().size());
 
     }
 

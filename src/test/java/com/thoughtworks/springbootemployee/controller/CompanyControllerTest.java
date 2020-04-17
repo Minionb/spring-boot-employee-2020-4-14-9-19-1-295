@@ -2,6 +2,7 @@ package com.thoughtworks.springbootemployee.controller;
 
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
+import com.thoughtworks.springbootemployee.respository.CompanyRepository;
 import io.restassured.http.ContentType;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import io.restassured.module.mockmvc.response.MockMvcResponse;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import io.restassured.mapper.TypeRef;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
@@ -25,9 +27,23 @@ public class CompanyControllerTest {
     @Autowired
     private CompanyController companyController;
 
+    @Autowired
+    private CompanyRepository companyRepository;
+
     @Before
     public void setUp() throws Exception{
         RestAssuredMockMvc.standaloneSetup(companyController);
+        List<Employee> employees=  new ArrayList<>(Arrays.asList(
+                new Employee(1, "Hilary", 23, "female", 10000),
+                new Employee(2, "Jay", 30, "male", 10000),
+                new Employee(3, "Candy", 23, "female", 10000),
+                new Employee(4, "Tommy", 26, "male", 10000)
+        ));
+
+        companyRepository.setCompanies(new ArrayList<>(Arrays.asList(
+                new Company(1, "Alibaba", 200, employees.subList(0, 2)),
+                new Company(2, "Chocolate Factory", 50, employees.subList(2, 4))
+        )));
     }
 
     @Test

@@ -18,7 +18,7 @@ public class CompanyService {
     }
 
     public ResponseEntity<Object> getById(int companyId) {
-        return companyRepository.findById(companyId);
+        return companyRepository.findCompanyById(companyId);
     }
 
     public ResponseEntity<Object> getEmployeesByCompanyId(int companyId) {

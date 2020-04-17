@@ -31,29 +31,42 @@ public class EmployeeController {
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> deleteEmployee(@PathVariable int employeeId) {
-        return service.delete(employeeId);
+        boolean isDelete = service.delete(employeeId);
+        if (!isDelete) {
+            return new ResponseEntity<>("Error, employee is not exist.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>("Remove employee with id " + employeeId + " successfully", HttpStatus.OK);
     }
 
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> updateEmployee(@PathVariable int employeeId, @RequestBody Employee newEmployee) {
-        return service.update(employeeId, newEmployee);
-
+        boolean isUpdate = service.updateEmployees(employeeId, newEmployee);
+        if (!isUpdate) {
+            return new ResponseEntity<>("Error, employee is not exist.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(newEmployee, HttpStatus.OK);
     }
 
     @GetMapping("/{employeeId}")
     public ResponseEntity<Object> getEmployeesById(@PathVariable int employeeId) {
-        return service.getById(employeeId);
+        Employee targetEmployee = service.getById(employeeId);
+        if (targetEmployee != null) {
+            return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Employee does not exist", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(params = {"gender"})
     public ResponseEntity<Object> getEmployeesByGender(@RequestParam(value = "gender") String gender) {
-        return service.getByGender(gender);
+        List<Employee> returnEmployees = service.getEmployeeByGender(gender);
+        return new ResponseEntity<>(returnEmployees, HttpStatus.OK);
     }
 
     @GetMapping(params = {"page", "pageSize"})
     public ResponseEntity<Object> getEmployeesPage(@RequestParam(value = "page") int page, @RequestParam(value = "pageSize") int pageSize) {
-        return service.getPage(page, pageSize);
+        List<Employee> returnEmployees = service.getEmployeesWithPagination(page, pageSize);
+        return new ResponseEntity<>(returnEmployees, HttpStatus.OK);
     }
 
 }
