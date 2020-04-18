@@ -76,7 +76,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_add_employee_successful_when_create_new_employee() {
-        Employee employee = new Employee(5,"Kathy",26,"female",10000);
+        Employee employee = new Employee(5,"Kathy",26,"female",10000,1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(employee)
                 .when()
@@ -124,7 +124,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_update_employee_information_by_id(){
-        Employee newEmployee = new Employee(3,"Kathy",26,"female",10000);
+        Employee newEmployee = new Employee(3,"Kathy",26,"female",10000,1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(newEmployee)
                 .when()
