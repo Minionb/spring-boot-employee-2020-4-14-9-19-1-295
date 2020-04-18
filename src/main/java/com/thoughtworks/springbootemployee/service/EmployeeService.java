@@ -33,11 +33,11 @@ public class EmployeeService {
     public boolean delete(Integer employeeId) {
         Employee targetEmployee = employeeRepository.findById((employeeId)).orElse(null);
         ParkingBoy targetParkingBoy = parkingBoyRepository.findAll().stream()
-                .filter(parkingBoy->parkingBoy.getEmployeeId() == employeeId)
+                .filter(parkingBoy -> parkingBoy.getEmployeeId() == employeeId)
                 .findFirst()
                 .orElse(null);
 
-        if (targetEmployee == null && targetParkingBoy == null){
+        if (targetEmployee == null && targetParkingBoy == null) {
             return false;
         }
         parkingBoyRepository.delete(targetParkingBoy);
@@ -52,21 +52,26 @@ public class EmployeeService {
             return false;
         }
 
-        if (newEmployee.getName() != null){
+        if (newEmployee.getName() != null) {
             targetEmployee.setName(newEmployee.getName());
         }
 
-        if(newEmployee.getAge() != null){
+        if (newEmployee.getAge() != null) {
             targetEmployee.setAge(newEmployee.getAge());
         }
 
-        if(newEmployee.getGender() != null){
+        if (newEmployee.getGender() != null) {
             targetEmployee.setGender(newEmployee.getGender());
         }
 
-        if(newEmployee.getSalary() != null){
+        if (newEmployee.getSalary() != null) {
             targetEmployee.setSalary(newEmployee.getSalary());
         }
+
+        if (newEmployee.getCompanyId() != null) {
+            targetEmployee.setCompanyId(newEmployee.getCompanyId());
+        }
+
         employeeRepository.save(targetEmployee);
         return true;
     }
@@ -76,6 +81,6 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeesWithPagination(Integer page, Integer pageSize) {
-        return employeeRepository.findAll(PageRequest.of(page-1, pageSize)).getContent();
+        return employeeRepository.findAll(PageRequest.of(page - 1, pageSize)).getContent();
     }
 }

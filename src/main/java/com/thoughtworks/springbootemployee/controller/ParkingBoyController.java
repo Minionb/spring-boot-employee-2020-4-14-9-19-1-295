@@ -64,9 +64,9 @@ public class ParkingBoyController {
         return new ResponseEntity<>(parkingBoys, HttpStatus.OK);
     }
 
-    @GetMapping(params = {"page","pageSize"})
-    public ResponseEntity<Object> getParkingBoyInPage(@RequestParam Integer page, Integer pageSize){
-        List<ParkingBoy> parkingBoys = parkingBoyService.getParkingBoyInPage(page,pageSize);
+    @GetMapping(params = {"page", "pageSize"})
+    public ResponseEntity<Object> getParkingBoyInPage(@RequestParam Integer page, Integer pageSize) {
+        List<ParkingBoy> parkingBoys = parkingBoyService.getParkingBoyInPage(page, pageSize);
         return new ResponseEntity<>(parkingBoys, HttpStatus.OK);
     }
 }
