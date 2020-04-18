@@ -30,7 +30,7 @@ public class EmployeeController {
 
     @DeleteMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> deleteEmployee(@PathVariable int employeeId) {
+    public ResponseEntity<Object> deleteEmployee(@PathVariable Integer employeeId) {
         boolean isDelete = service.delete(employeeId);
         if (!isDelete) {
             return new ResponseEntity<>("Error, employee is not exist.", HttpStatus.BAD_REQUEST);
@@ -40,7 +40,7 @@ public class EmployeeController {
 
     @PutMapping("/{employeeId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updateEmployee(@PathVariable int employeeId, @RequestBody Employee newEmployee) {
+    public ResponseEntity<Object> updateEmployee(@PathVariable Integer employeeId, @RequestBody Employee newEmployee) {
         boolean isUpdate = service.updateEmployees(employeeId, newEmployee);
         if (!isUpdate) {
             return new ResponseEntity<>("Error, employee is not exist.", HttpStatus.BAD_REQUEST);
@@ -49,7 +49,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/{employeeId}")
-    public ResponseEntity<Object> getEmployeesById(@PathVariable int employeeId) {
+    public ResponseEntity<Object> getEmployeesById(@PathVariable Integer employeeId) {
         Employee targetEmployee = service.get(employeeId);
         if (targetEmployee != null) {
             return new ResponseEntity<>(targetEmployee, HttpStatus.OK);
@@ -64,7 +64,7 @@ public class EmployeeController {
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public ResponseEntity<Object> getEmployeesPage(@RequestParam(value = "page") int page, @RequestParam(value = "pageSize") int pageSize) {
+    public ResponseEntity<Object> getEmployeesPage(@RequestParam(value = "page") Integer page, @RequestParam(value = "pageSize") Integer pageSize) {
         List<Employee> returnEmployees = service.getEmployeesWithPagination(page, pageSize);
         return new ResponseEntity<>(returnEmployees, HttpStatus.OK);
     }

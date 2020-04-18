@@ -22,17 +22,17 @@ public class CompanyController {
     }
 
     @GetMapping(path = "/{companyId}")
-    public Company getCompany(@PathVariable int companyId) {
+    public Company getCompany(@PathVariable Integer companyId) {
         return companyService.getCompanyById(companyId);
     }
 
     @GetMapping(path = "/{companyId}/employees")
-    public List<Employee> getEmployeesInCompany(@PathVariable int companyId) {
+    public List<Employee> getEmployeesInCompany(@PathVariable Integer companyId) {
         return companyService.getEmployeesInCompany(companyId);
     }
 
     @GetMapping(params = {"page", "pageSize"})
-    public ResponseEntity<Object> getCompaniesPage(@RequestParam(value = "page") int page, @RequestParam(value = "pageSize") int pageSize) {
+    public ResponseEntity<Object> getCompaniesPage(@RequestParam(value = "page") Integer page, @RequestParam(value = "pageSize") Integer pageSize) {
         return new ResponseEntity<>(companyService.getCompaniesWithPagination(page, pageSize), HttpStatus.OK);
     }
 
@@ -44,7 +44,7 @@ public class CompanyController {
     }
 
     @PutMapping("/{companyId}")
-    public ResponseEntity<Object> updateCompanies(@PathVariable int companyId, @RequestBody Company newCompany) {
+    public ResponseEntity<Object> updateCompanies(@PathVariable Integer companyId, @RequestBody Company newCompany) {
         boolean isUpdate = companyService.updateByCompanyId(companyId, newCompany);
         if (!isUpdate) {
             return new ResponseEntity<>("Error, company is not exist.", HttpStatus.BAD_REQUEST);
@@ -53,12 +53,12 @@ public class CompanyController {
     }
 
     @DeleteMapping("/{companyId}")
-    public ResponseEntity<Object> deleteCompaniesEmployees(@PathVariable int companyId) {
+    public ResponseEntity<Object> deleteCompaniesEmployees(@PathVariable Integer companyId) {
         boolean isDelete = companyService.deleteEmployeesByCompanyId(companyId);
         if (!isDelete) {
-            return new ResponseEntity<>("Error, company or company employee list in company is not exist", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error, the company doesn't exist or employee list in the company is already empty. ", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Clear company  + " + companyId + " employee list successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Clear company  " + companyId + " employee list successfully", HttpStatus.OK);
     }
 
 }

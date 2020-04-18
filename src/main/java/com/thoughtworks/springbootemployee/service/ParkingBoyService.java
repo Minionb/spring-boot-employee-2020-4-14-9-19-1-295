@@ -27,7 +27,7 @@ public class ParkingBoyService {
 
     public boolean deleteParkingBoyById(Integer parkingBoyId) {
         ParkingBoy targetParkingBoy = parkingBoyRepository.findById(parkingBoyId).orElse(null);
-        if (targetParkingBoy == null){
+        if (targetParkingBoy == null) {
             return false;
         }
         parkingBoyRepository.delete(targetParkingBoy);
@@ -36,10 +36,10 @@ public class ParkingBoyService {
 
     public boolean updateParkingBoyById(Integer parkingBoyId, ParkingBoy newParkingBoy) {
         ParkingBoy targetParkingBoy = parkingBoyRepository.findById(parkingBoyId).orElse(null);
-        if (targetParkingBoy == null){
+        if (targetParkingBoy == null) {
             return false;
         }
-        if (newParkingBoy.getNickname() != null){
+        if (newParkingBoy.getNickname() != null) {
             targetParkingBoy.setNickname(newParkingBoy.getNickname());
         }
         parkingBoyRepository.save(targetParkingBoy);
@@ -51,6 +51,6 @@ public class ParkingBoyService {
     }
 
     public List<ParkingBoy> getParkingBoyInPage(Integer page, Integer pageSize) {
-        return parkingBoyRepository.findAll(PageRequest.of(page-1, pageSize)).getContent();
+        return parkingBoyRepository.findAll(PageRequest.of(page - 1, pageSize)).getContent();
     }
 }

@@ -3,6 +3,7 @@ package com.thoughtworks.springbootemployee.service;
 import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,18 @@ public class CompanyService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
     public List<Company> getCompanies() {
         return companyRepository.findAll();
     }
 
-    public Company getCompanyById(int companyId) {
+    public Company getCompanyById(Integer companyId) {
         return companyRepository.findById(companyId).orElse(null);
     }
 
-    public List<Employee> getEmployeesInCompany(int companyId) {
+    public List<Employee> getEmployeesInCompany(Integer companyId) {
         Company targetCompany = companyRepository.findById(companyId).orElse(null);
         return targetCompany.getEmployees();
     }
@@ -38,7 +42,7 @@ public class CompanyService {
         companyRepository.save(company);
     }
 
-    public Boolean updateByCompanyId(int companyId, Company newCompany) {
+    public Boolean updateByCompanyId(Integer companyId, Company newCompany) {
         Company targetCompany = companyRepository.findById(companyId).orElse(null);
 
         if (targetCompany == null) {
@@ -62,9 +66,18 @@ public class CompanyService {
     }
 
 
-    public boolean deleteEmployeesByCompanyId(int companyID) {
+    public boolean deleteEmployeesByCompanyId(Integer companyID) {
         Company selectedCompany = companyRepository.findById(companyID).orElse(null);
-        if (selectedCompany != null && selectedCompany.getEmployees() != null) {
+        if (selectedCompany != null && selectedCompany.getEmployees().size() != 0) {
+            List<Employee> employeeList = employeeRepository.findAll().stream()
+                    .filter(employee -> employee.getCompanyId() == companyID)
+                    .collect(Collectors.toList());
+
+            for (Employee employee : employeeList) {
+                employee.setCompanyId(null);
+                employeeRepository.save(employee);
+            }
+
             selectedCompany.setEmployees(new ArrayList<>());
             companyRepository.save(selectedCompany);
             return true;
