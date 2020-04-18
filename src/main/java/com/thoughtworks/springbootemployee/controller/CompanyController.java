@@ -39,8 +39,8 @@ public class CompanyController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Company createNewCompany(@RequestBody Company company) {
-         companyService.createCompany(company);
-         return company;
+        companyService.createCompany(company);
+        return company;
     }
 
     @PutMapping("/{companyId}")
@@ -56,9 +56,9 @@ public class CompanyController {
     public ResponseEntity<Object> deleteCompaniesEmployees(@PathVariable int companyId) {
         boolean isDelete = companyService.deleteEmployeesByCompanyId(companyId);
         if (!isDelete) {
-            return new ResponseEntity<>("Error, employee list in company is not exist", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error, company or company employee list in company is not exist", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Remove company with id " + companyId + " successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Clear company  + " + companyId + " employee list successfully", HttpStatus.OK);
     }
 
 }

@@ -4,6 +4,7 @@ import com.thoughtworks.springbootemployee.model.Company;
 import com.thoughtworks.springbootemployee.model.Employee;
 import com.thoughtworks.springbootemployee.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,23 +22,16 @@ public class CompanyService {
     }
 
     public Company getCompanyById(int companyId) {
-        return companyRepository.findCompanyById(companyId);
+        return companyRepository.findById(companyId).orElse(null);
     }
 
     public List<Employee> getEmployeesInCompany(int companyId) {
-        Company targetCompany = companyRepository.findCompanyById(companyId);
+        Company targetCompany = companyRepository.findById(companyId).orElse(null);
         return targetCompany.getEmployees();
     }
 
-    public List<Company> getCompaniesWithPagination(int page, int pageSize) {
-        int startingIndex = (page - 1) * pageSize;
-        int endingIndex = page * pageSize;
-        List<Company> companies = this.companyRepository.findAll();
-        return companies.stream()
-                .sorted(Comparator.comparing(Company::getId))
-                .skip(startingIndex)
-                .limit(endingIndex)
-                .collect(Collectors.toList());
+    public List<Company> getCompaniesWithPagination(Integer page, Integer pageSize) {
+        return companyRepository.findAll(PageRequest.of(page - 1, pageSize)).getContent();
     }
 
     public void createCompany(Company company) {
@@ -45,21 +39,34 @@ public class CompanyService {
     }
 
     public Boolean updateByCompanyId(int companyId, Company newCompany) {
-        Company targetCompany = companyRepository.findCompanyById(companyId);
+        Company targetCompany = companyRepository.findById(companyId).orElse(null);
+
         if (targetCompany == null) {
             return false;
         }
-        companyRepository.update(companyId, newCompany);
+
+        if (newCompany.getCompanyName() != null) {
+            targetCompany.setCompanyName(newCompany.getCompanyName());
+        }
+
+        if (newCompany.getEmployeesNumber() != null) {
+            targetCompany.setEmployeesNumber(newCompany.getEmployeesNumber());
+        }
+
+        if (newCompany.getEmployees() != null) {
+            targetCompany.setEmployees(newCompany.getEmployees());
+        }
+
+        companyRepository.save(targetCompany);
         return true;
     }
 
 
     public boolean deleteEmployeesByCompanyId(int companyID) {
-        Company selectedCompany = companyRepository.findAll().stream().
-                filter(company -> company.getId() == companyID).findFirst().
-                orElse(null);
+        Company selectedCompany = companyRepository.findById(companyID).orElse(null);
         if (selectedCompany != null && selectedCompany.getEmployees() != null) {
             selectedCompany.setEmployees(new ArrayList<>());
+            companyRepository.save(selectedCompany);
             return true;
         }
         return false;
