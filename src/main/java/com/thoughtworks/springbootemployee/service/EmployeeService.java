@@ -1,14 +1,12 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.model.Employee;
-import com.thoughtworks.springbootemployee.respository.EmployeeRepository;
+import com.thoughtworks.springbootemployee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EmployeeService {
@@ -58,6 +56,7 @@ public class EmployeeService {
         if(newEmployee.getSalary() != null){
             targetEmployee.setSalary(newEmployee.getSalary());
         }
+        employeeRepository.save(targetEmployee);
         return true;
     }
 
@@ -66,14 +65,6 @@ public class EmployeeService {
     }
 
     public List<Employee> getEmployeesWithPagination(Integer page, Integer pageSize) {
-        return employeeRepository.findAll(PageRequest.of(page,pageSize)).getContent();
-//        int startingIndex = (page - 1) * pageSize;
-//        int endingIndex = page * pageSize;
-//        List<Employee> employees = this.employeeRepository.findAll();
-//        return employees.stream()
-//                .sorted(Comparator.comparing(Employee::getId))
-//                .skip(startingIndex)
-//                .limit(endingIndex)
-//                .collect(Collectors.toList());
+        return employeeRepository.findAll(PageRequest.of(page-1, pageSize)).getContent();
     }
 }
