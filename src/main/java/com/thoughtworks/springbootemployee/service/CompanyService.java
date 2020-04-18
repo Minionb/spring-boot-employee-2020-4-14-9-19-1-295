@@ -56,10 +56,6 @@ public class CompanyService {
             targetCompany.setEmployeesNumber(newCompany.getEmployeesNumber());
         }
 
-        if (newCompany.getEmployees() != null) {
-            targetCompany.setEmployees(newCompany.getEmployees());
-        }
-
         companyRepository.save(targetCompany);
         return true;
     }
