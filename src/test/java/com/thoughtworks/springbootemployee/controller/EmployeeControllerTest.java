@@ -148,7 +148,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_return_employees_in_page() {
+    public void should_return_2_employees_in_page_2() {
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/employees?page=2&pageSize=2");
@@ -160,7 +160,7 @@ public class EmployeeControllerTest {
             }
         });
         Assert.assertEquals(200, response.getStatusCode());
-//        Assert.assertEquals("Candy", employees.get(0).getName());
-//        Assert.assertEquals("Tommy", employees.get(1).getName());
+        Assert.assertEquals("Jay", employees.get(0).getName());
+        Assert.assertEquals("Wesley", employees.get(1).getName());
     }
 }
