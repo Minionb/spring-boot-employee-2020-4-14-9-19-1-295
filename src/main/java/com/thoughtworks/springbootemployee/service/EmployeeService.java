@@ -37,10 +37,13 @@ public class EmployeeService {
                 .findFirst()
                 .orElse(null);
 
-        if (targetEmployee == null && targetParkingBoy == null) {
+        if (targetEmployee == null) {
             return false;
         }
-        parkingBoyRepository.delete(targetParkingBoy);
+
+        if(targetParkingBoy != null){
+            parkingBoyRepository.delete(targetParkingBoy);
+        }
         employeeRepository.delete(targetEmployee);
         return true;
     }

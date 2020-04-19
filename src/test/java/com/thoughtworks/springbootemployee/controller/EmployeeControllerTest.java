@@ -129,7 +129,7 @@ public class EmployeeControllerTest {
                 .delete("/employees/5");
 
         Assert.assertEquals(200, response.getStatusCode());
-        // Assert.assertEquals(3, this.employeeRepository.findAll().size());
+        Assert.assertEquals(4, this.employeeRepository.findAll().size());
 
     }
 
