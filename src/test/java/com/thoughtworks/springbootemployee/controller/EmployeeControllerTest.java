@@ -151,8 +151,6 @@ public class EmployeeControllerTest {
 
         Assert.assertEquals(200, response.getStatusCode());
 
-        Employee employee = response.getBody().as(Employee.class);
-
         Assert.assertEquals("Kathy", this.employeeRepository.findById(3).orElse(null).getName());
         Assert.assertEquals(1, this.employeeRepository.findById(3).orElse(null).getCompanyId().intValue());
         Assert.assertEquals(1, companyRepository.findById(1).orElse(null).getEmployees().size());

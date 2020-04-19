@@ -23,4 +23,10 @@ public class ParkingBoy {
     @OneToOne
     @JoinColumn(name = "employeeId", insertable = false, updatable = false)
     private Employee employee;
+
+    public ParkingBoy(Integer id, String nickname, Integer employeeId) {
+        this.id = id;
+        this.nickname = nickname;
+        this. employeeId = employeeId;
+    }
 }

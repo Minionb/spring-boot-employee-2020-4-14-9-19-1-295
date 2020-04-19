@@ -16,10 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import io.restassured.mapper.TypeRef;
 
-import javax.validation.constraints.Null;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
@@ -75,7 +72,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void should_return_company_by_id() {
+    public void should_return_company_successfully_when_insert_id() {
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies/1");
@@ -89,7 +86,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void should_return_employees_of_a_company() {
+    public void should_return_employees_of_a_company_when_insert_company_id() {
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .get("/companies/1/employees");
@@ -127,7 +124,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void should_add_company() {
+    public void should_add_company_successfully() {
         Company newCompany = new Company(3, "OOCL", 400, null);
 
         MockMvcResponse response = given().contentType(ContentType.JSON)
@@ -145,7 +142,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void should_update_company_by_id() {
+    public void should_update_company_successfully_when_insert_company_id() {
         Assert.assertEquals("Chocolate Factory", this.companyRepository.findById(2).orElse(null).getCompanyName());
         Assert.assertEquals(50, this.companyRepository.findById(2).orElse(null).getEmployeesNumber().intValue());
 
@@ -163,7 +160,7 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void should_delete_employees_of_the_company_by_id() {
+    public void should_delete_employees_of_the_company_successfully_when_insert_company_id() {
         Assert.assertEquals(3, this.companyRepository.findById(1).orElse(null).getEmployees().size());
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
