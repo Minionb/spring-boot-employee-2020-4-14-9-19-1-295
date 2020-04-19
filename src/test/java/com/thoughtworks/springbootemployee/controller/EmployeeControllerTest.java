@@ -46,11 +46,11 @@ public class EmployeeControllerTest {
 
         employeeRepository.deleteAll();
         employeeRepository.resetAutoIncrement();
-        employeeRepository.save(new Employee(1, 20, null, "female", "Hilary", 10000));
-        employeeRepository.save(new Employee(2, 20, null, "male", "Leo", 10000));
-        employeeRepository.save(new Employee(3, 20, null, "male", "Jay", 10000));
-        employeeRepository.save(new Employee(4,20 , null, "male", "Wesley", 10000));
-        employeeRepository.save(new Employee(5, 20, null, "male", "Andy", 10000));
+        employeeRepository.save(new Employee(1, "Hilary", 20, "female", 10000, null));
+        employeeRepository.save(new Employee(2, "Leo", 20, "male", 10000, null));
+        employeeRepository.save(new Employee(3, "Jay", 20, "male", 10000, null));
+        employeeRepository.save(new Employee(4, "Wesley", 20, "male", 10000, null));
+        employeeRepository.save(new Employee(5, "Andy", 20, "male", 10000, null));
     }
 
 
@@ -68,7 +68,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_find_employee_by_gender() {
+    public void should_return_employee_list_when_query_gender() {
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .params("gender", "male")
                 .when()
@@ -76,19 +76,19 @@ public class EmployeeControllerTest {
 
         Assert.assertEquals(200, response.getStatusCode());
 
-//        List<Employee> employees = response.getBody().as(new TypeRef<List<Employee>>() {
-//            @Override
-//            public Type getType() {
-//                return super.getType();
-//            }
-//        });
-//        Assert.assertEquals(2, employees.size());
-//        Assert.assertEquals("Jay", employees.get(0).getName());
+        List<Employee> employees = response.getBody().as(new TypeRef<List<Employee>>() {
+            @Override
+            public Type getType() {
+                return super.getType();
+            }
+        });
+        Assert.assertEquals(4, employees.size());
+        Assert.assertEquals("Leo", employees.get(0).getName());
     }
 
     @Test
     public void should_add_employee_successful_when_create_new_employee() {
-        Employee employee = new Employee(5, 20, null, "female", "Kathy", 10000);
+        Employee employee = new Employee(5, "Kathy", 26, "female", 10000, 1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(employee)
                 .when()
@@ -136,7 +136,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void should_update_employee_information_by_id() {
-        Employee newEmployee = new Employee(3, 20, null, "female", "Kathy", 10000);
+        Employee newEmployee = new Employee(3, "Kathy", 26, "female", 10000, 1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(newEmployee)
                 .when()
