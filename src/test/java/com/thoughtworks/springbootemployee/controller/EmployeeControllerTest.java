@@ -32,8 +32,6 @@ public class EmployeeControllerTest {
     @Autowired
     EmployeeRepository employeeRepository;
 
-    List<Employee> employeesList = new ArrayList<>();
-
     @Before
     public void setUp() throws Exception {
         RestAssuredMockMvc.standaloneSetup(employeeController);
@@ -87,8 +85,8 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_add_employee_successful_when_create_new_employee() {
-        Employee employee = new Employee(5, "Kathy", 26, "female", 10000, 1);
+    public void should_add_employee_successfully_when_create_new_employee() {
+        Employee employee = new Employee(5, "Kathy", 26, "female", 10000, null);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(employee)
                 .when()
@@ -96,9 +94,9 @@ public class EmployeeControllerTest {
 
         Assert.assertEquals(201, response.getStatusCode());
 
-//        Employee employeeResponse = response.getBody().as(Employee.class);
-//
-//        Assert.assertEquals("Kathy", employeeResponse.getName());
+        Employee employeeResponse = response.getBody().as(Employee.class);
+
+        Assert.assertEquals("Kathy", employeeResponse.getName());
     }
 
     @Test
@@ -116,11 +114,12 @@ public class EmployeeControllerTest {
             }
         });
 
-//        Assert.assertEquals(4, employees.size());
-//        Assert.assertEquals("Hilary", employees.get(0).getName());
-//        Assert.assertEquals("Jay", employees.get(1).getName());
-//        Assert.assertEquals("Candy", employees.get(2).getName());
-//        Assert.assertEquals("Tommy", employees.get(3).getName());
+        Assert.assertEquals(5, employees.size());
+        Assert.assertEquals("Hilary", employees.get(0).getName());
+        Assert.assertEquals("Leo", employees.get(1).getName());
+        Assert.assertEquals("Jay", employees.get(2).getName());
+        Assert.assertEquals("Wesley", employees.get(3).getName());
+        Assert.assertEquals("Andy", employees.get(4).getName());
     }
 
     @Test
