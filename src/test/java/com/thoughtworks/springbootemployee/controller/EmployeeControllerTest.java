@@ -134,17 +134,17 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void should_update_employee_information_by_id() {
-        Employee newEmployee = new Employee(3, "Kathy", 26, "female", 10000, 1);
+    public void should_update_employee_information_successfully_when_insert_id() {
+        Employee newEmployee = new Employee(3, "Kathy", 26, "female", 10000, null);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(newEmployee)
                 .when()
                 .put("/employees/3");
 
         Assert.assertEquals(200, response.getStatusCode());
-//        Employee employee = response.getBody().as(Employee.class);
-//        Assert.assertEquals(3, employee.getId().intValue());
-//        Assert.assertEquals("Kathy", employee.getName());
+        Employee employee = response.getBody().as(Employee.class);
+        Assert.assertEquals(3, employee.getId().intValue());
+        Assert.assertEquals("Kathy", this.employeeRepository.findById(3).orElse(null).getName());
     }
 
     @Test
