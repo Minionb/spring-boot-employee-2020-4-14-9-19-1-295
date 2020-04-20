@@ -78,7 +78,7 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <version>1.4.200</version>
+            <version>1.4.199</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -92,6 +92,10 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
         </dependency>
     </dependencies>
     <dependencyManagement>
@@ -119,6 +123,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <configuration>
+                    <url>jdbc:h2:C:\Users\nghi2\Documents\Bootcamp\Training\spring-boot-employee-2020-4-14-9-19-1-295\tw\flyway</url>
+                    <user>sa</user>
+                </configuration>
             </plugin>
         </plugins>
     </build>

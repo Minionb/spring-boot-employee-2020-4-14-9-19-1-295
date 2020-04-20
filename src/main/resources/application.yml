@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-  jpa:
-    hibernate:
-      ddl-auto: update
+    url: jdbc:h2:C:\Users\nghi2\Documents\Bootcamp\Training\spring-boot-employee-2020-4-14-9-19-1-295\tw\flyway
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
   h2:
     console:
       enabled: true

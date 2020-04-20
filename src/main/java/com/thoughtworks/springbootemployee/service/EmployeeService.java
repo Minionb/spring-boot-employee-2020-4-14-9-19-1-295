@@ -33,7 +33,7 @@ public class EmployeeService {
     public boolean delete(Integer employeeId) {
         Employee targetEmployee = employeeRepository.findById((employeeId)).orElse(null);
         ParkingBoy targetParkingBoy = parkingBoyRepository.findAll().stream()
-                .filter(parkingBoy -> parkingBoy.getEmployeeId() == employeeId)
+                .filter(parkingBoy -> parkingBoy.getEmployeeId().equals(employeeId))
                 .findFirst()
                 .orElse(null);
 

@@ -101,7 +101,6 @@ public class ParkingBoyControllerMockitoTest {
     @Test
     public void should_add_parking_boy_successfully(){
         ParkingBoy newParkingBoy = new ParkingBoy(3, "Jay Chou", 3);
-        Mockito.when(parkingBoyRepository.save( newParkingBoy)).thenReturn(newParkingBoy);
 
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(newParkingBoy)
@@ -117,7 +116,7 @@ public class ParkingBoyControllerMockitoTest {
     @Test
     public void should_delete_parking_boy_successfully_when_insert_id(){
         ParkingBoy deleteParkingBoy = parkingBoysList.get(0);
-        //Mockito.when(parkingBoyRepository.delete(deleteParkingBoy)).thenReturn(Optional.of(parkingBoysList.get(0));
+
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .delete("/parking-boys/1");

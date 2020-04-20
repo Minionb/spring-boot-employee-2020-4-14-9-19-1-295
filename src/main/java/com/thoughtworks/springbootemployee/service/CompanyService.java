@@ -65,7 +65,7 @@ public class CompanyService {
         Company selectedCompany = companyRepository.findById(companyID).orElse(null);
         if (selectedCompany != null && selectedCompany.getEmployees().size() != 0) {
             List<Employee> employeeList = employeeRepository.findAll().stream()
-                    .filter(employee -> employee.getCompanyId() == companyID)
+                    .filter(employee -> employee.getCompanyId().equals(companyID))
                     .collect(Collectors.toList());
 
             for (Employee employee : employeeList) {
@@ -73,8 +73,6 @@ public class CompanyService {
                 employeeRepository.save(employee);
             }
 
-            selectedCompany.setEmployees(new ArrayList<>());
-            companyRepository.save(selectedCompany);
             return true;
         }
         return false;
