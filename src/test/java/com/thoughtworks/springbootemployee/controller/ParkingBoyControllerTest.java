@@ -109,10 +109,11 @@ public class ParkingBoyControllerTest {
 
         Assert.assertEquals(201, response.getStatusCode());
 
+        ParkingBoy parkingBoy = response.getBody().as(ParkingBoy.class);
         Assert.assertEquals(3,this.parkingBoyRepository.findAll().size());
-        Assert.assertEquals(3,this.parkingBoyRepository.findById(3).orElse(null).getId().intValue());
-        Assert.assertEquals("Jay Chou",this.parkingBoyRepository.findById(3).orElse(null).getNickname());
-        Assert.assertEquals(3,this.parkingBoyRepository.findById(3).orElse(null).getEmployeeId().intValue());
+        Assert.assertEquals(3,parkingBoy.getId().intValue());
+        Assert.assertEquals("Jay Chou",parkingBoy.getNickname());
+        Assert.assertEquals(3,parkingBoy.getEmployeeId().intValue());
 
     }
 
@@ -140,7 +141,9 @@ public class ParkingBoyControllerTest {
 
         Assert.assertEquals(200, response.getStatusCode());
 
-        Assert.assertEquals("Minion",this.parkingBoyRepository.findById(1).orElse(null).getNickname());
+        ParkingBoy parkingBoy = response.getBody().as(ParkingBoy.class);
+
+        Assert.assertEquals("Minion",parkingBoy.getNickname());
     }
 
     @Test

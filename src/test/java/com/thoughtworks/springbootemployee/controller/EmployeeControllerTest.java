@@ -84,17 +84,21 @@ public class EmployeeControllerTest {
     public void should_add_employee_successfully_when_create_new_employee() {
         Assert.assertEquals(5, this.employeeRepository.findAll().size());
 
-        Employee employee = new Employee(6, "Kathy", 26, "female", 10000, null);
+        Employee newEmployee = new Employee(6, "Kathy", 26, "female", 10000, null);
         MockMvcResponse response = given().contentType(ContentType.JSON)
-                .body(employee)
+                .body(newEmployee)
                 .when()
                 .post("/employees");
 
         Assert.assertEquals(201, response.getStatusCode());
 
-        Employee employeeResponse = response.getBody().as(Employee.class);
-        Assert.assertEquals(6, this.employeeRepository.findAll().size());
-        Assert.assertEquals("Kathy", this.employeeRepository.findById(6).orElse(null).getName());
+        Employee employee = response.getBody().as(Employee.class);
+
+        Assert.assertEquals(6, employee.getId().intValue());
+        Assert.assertEquals("Kathy", employee.getName());
+        Assert.assertEquals(26, employee.getAge().intValue());
+        Assert.assertEquals("female", employee.getGender());
+        Assert.assertEquals(10000, employee.getSalary().intValue());
     }
 
     @Test
@@ -139,10 +143,6 @@ public class EmployeeControllerTest {
         companyRepository.resetAutoIncrement();
         companyRepository.save(new Company(1, "Alibaba", 200, null));
 
-        Assert.assertEquals("Jay", this.employeeRepository.findById(3).orElse(null).getName());
-        Assert.assertNull( this.employeeRepository.findById(3).orElse(null).getCompanyId());
-        Assert.assertEquals(0, companyRepository.findById(1).orElse(null).getEmployees().size());
-
         Employee newEmployee = new Employee(3, "Kathy", 26, "female", 10000, 1);
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .body(newEmployee)
@@ -151,9 +151,13 @@ public class EmployeeControllerTest {
 
         Assert.assertEquals(200, response.getStatusCode());
 
-        Assert.assertEquals("Kathy", this.employeeRepository.findById(3).orElse(null).getName());
-        Assert.assertEquals(1, this.employeeRepository.findById(3).orElse(null).getCompanyId().intValue());
-        Assert.assertEquals(1, companyRepository.findById(1).orElse(null).getEmployees().size());
+        Employee employee = response.getBody().as(Employee.class);
+
+        Assert.assertEquals(3, employee.getId().intValue());
+        Assert.assertEquals("Kathy", employee.getName());
+        Assert.assertEquals(26, employee.getAge().intValue());
+        Assert.assertEquals("female", employee.getGender());
+        Assert.assertEquals(10000, employee.getSalary().intValue());
     }
 
     @Test

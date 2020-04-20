@@ -136,16 +136,13 @@ public class CompanyControllerTest {
 
         Company company = response.getBody().as(Company.class);
 
-        Assert.assertEquals(3, this.companyRepository.findById(3).orElse(null).getId().intValue());
-        Assert.assertEquals("OOCL", this.companyRepository.findById(3).orElse(null).getCompanyName());
-        Assert.assertEquals(400, this.companyRepository.findById(3).orElse(null).getEmployeesNumber().intValue());
+        Assert.assertEquals(3, company.getId().intValue());
+        Assert.assertEquals("OOCL", company.getCompanyName());
+        Assert.assertEquals(400, company.getEmployeesNumber().intValue());
     }
 
     @Test
     public void should_update_company_successfully_when_insert_company_id() {
-        Assert.assertEquals("Chocolate Factory", this.companyRepository.findById(2).orElse(null).getCompanyName());
-        Assert.assertEquals(50, this.companyRepository.findById(2).orElse(null).getEmployeesNumber().intValue());
-
         Company selectedCompany = new Company(2,"Minion Factory",300,null);
 
         MockMvcResponse response = given().contentType(ContentType.JSON)
@@ -155,8 +152,10 @@ public class CompanyControllerTest {
 
         Assert.assertEquals(200, response.getStatusCode());
 
-        Assert.assertEquals("Minion Factory", this.companyRepository.findById(2).orElse(null).getCompanyName());
-        Assert.assertEquals(300, this.companyRepository.findById(2).orElse(null).getEmployeesNumber().intValue());
+        Company company = response.getBody().as(Company.class);
+
+        Assert.assertEquals("Minion Factory", company.getCompanyName());
+        Assert.assertEquals(300, company.getEmployeesNumber().intValue());
     }
 
     @Test

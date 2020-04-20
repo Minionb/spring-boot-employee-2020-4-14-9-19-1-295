@@ -12,12 +12,14 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.lang.reflect.Array;
@@ -109,17 +111,35 @@ public class ParkingBoyControllerMockitoTest {
 
         Assert.assertEquals(201, response.getStatusCode());
 
-        Mockito.verify(parkingBoyRepository, Mockito.times(1)).save(newParkingBoy);
+        Mockito.verify(parkingBoyRepository, Mockito.times(1)).save(Mockito.any(ParkingBoy.class));
 
     }
 
     @Test
     public void should_delete_parking_boy_successfully_when_insert_id(){
         ParkingBoy deleteParkingBoy = parkingBoysList.get(0);
+        //Mockito.when(parkingBoyRepository.delete(deleteParkingBoy)).thenReturn(Optional.of(deleteParkingBoy));
 
         MockMvcResponse response = given().contentType(ContentType.JSON)
                 .when()
                 .delete("/parking-boys/1");
+
+        Assert.assertEquals(200, response.getStatusCode());
+
+        Mockito.verify(parkingBoyRepository, Mockito.times(1)).delete(Mockito.any(ParkingBoy.class));
+    }
+
+    @Test
+    public void should_return_2_parking_boy_in_page_1(){
+        Mockito.when(parkingBoyRepository.findAll(PageRequest.of(0,2)).getContent()).thenReturn(parkingBoysList);
+        MockMvcResponse response = given().contentType(ContentType.JSON)
+                .when()
+                .get("/parking-boys?page=1&pageSize=2");
+
+        Assert.assertEquals(200, response.getStatusCode());
+
+
+
     }
 }
 
